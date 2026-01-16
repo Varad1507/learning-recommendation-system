@@ -19,8 +19,13 @@ function App() {
 
     try {
       const res = await fetch(
-        `http://127.0.0.1:5000/recommend/${studentId}`
+        `https://learning-recommendation-system-2.onrender.com/recommend/${studentId}`
       );
+
+      if (!res.ok) {
+        throw new Error("API error");
+      }
+
       const data = await res.json();
 
       if (!data.recommendations || data.recommendations.length === 0) {
@@ -28,8 +33,8 @@ function App() {
       } else {
         setRecommendations(data.recommendations);
       }
-    } catch {
-      setMessage("Backend not reachable");
+    } catch (error) {
+      setMessage("Backend not reachable. Please try again later.");
     }
 
     setLoading(false);
@@ -39,8 +44,9 @@ function App() {
     <div className="page">
       <div className="main-card">
         <h1>Learning Recommendation System</h1>
+
         <p className="subtitle">
-          Personalized learning paths with explainable AI (RAG)
+          Personalized learning paths with explainable recommendations
         </p>
 
         <div className="input-section">
@@ -78,7 +84,11 @@ function App() {
                   </p>
                 </details>
 
-                <a href={rec.Link} target="_blank" rel="noreferrer">
+                <a
+                  href={rec.Link}
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   Open Resource →
                 </a>
               </div>
