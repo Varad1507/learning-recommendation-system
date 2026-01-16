@@ -4,6 +4,7 @@ import os
 from backend.database import db
 from backend import models
 from backend.recommender_core import recommend_for_student
+from backend.seed_data import seed_database
 
 def create_app():
     app = Flask(__name__)
@@ -20,6 +21,7 @@ def create_app():
 
     with app.app_context():
         db.create_all()
+        seed_database()
 
     @app.route("/recommend/<int:student_id>", methods=["GET"])
     def recommend(student_id):
