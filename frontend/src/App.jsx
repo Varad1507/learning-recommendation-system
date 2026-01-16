@@ -18,9 +18,9 @@ function App() {
     setRecommendations([]);
 
     try {
-      const res = await fetch(
-        `https://learning-recommendation-system-2.onrender.com/recommend/${studentId}`
-      );
+        const res = await fetch(
+  `     https://learning-recommendation-system-2.onrender.com/recommend/${studentId}`
+);
 
       if (!res.ok) {
         throw new Error("API error");
