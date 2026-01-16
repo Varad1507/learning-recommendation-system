@@ -1,0 +1,41 @@
+Topic: Sorting
+Sorting algorithms arrange data in a specific order such as ascending or descending.
+A strong understanding of sorting is essential because many advanced algorithms rely on sorted data.
+Common student mistakes include misunderstanding time complexity, confusing stable and unstable sorting, and improper implementation of divide-and-conquer logic.
+Students with low sorting scores often struggle with algorithm efficiency and optimization problems.
+Best learning approach: begin with simple algorithms like Bubble Sort and Insertion Sort to understand comparisons and swaps, then progress to Merge Sort and Quick Sort to learn recursion and efficiency trade-offs.
+
+Topic: Linked Lists
+Linked Lists store data as nodes connected through pointers rather than contiguous memory locations.
+Students often face difficulty with pointer manipulation, traversal logic, and handling edge cases such as insertion or deletion at the head or tail.
+Linked Lists are fundamental for understanding stacks, queues, hash tables, and graph representations.
+Weak performance in this topic usually indicates gaps in memory management and reference handling.
+Best learning approach: practice implementing singly and doubly linked lists, focusing on insertion, deletion, and traversal operations.
+
+Topic: Arrays
+Arrays store elements in contiguous memory locations and allow constant-time indexed access.
+Students commonly struggle with boundary conditions, index out-of-range errors, and inefficient looping logic.
+Arrays form the basis for many data structures and algorithms including searching, sorting, and dynamic programming.
+Low scores in arrays often indicate weak problem decomposition and iteration logic.
+Best learning approach: practice basic array operations, sliding window techniques, and frequency-based problems.
+
+Topic: Recursion
+Recursion is a programming technique where a function calls itself to solve smaller subproblems.
+Students frequently struggle with defining correct base cases and understanding call stack behavior.
+Recursion is critical for tree traversal, divide-and-conquer algorithms, and dynamic programming.
+Weak performance in recursion usually reflects difficulty in breaking problems into smaller logical units.
+Best learning approach: start with simple recursive problems such as factorials and Fibonacci, then move to tree and graph-based recursion.
+
+Topic: Searching
+Searching algorithms locate elements within a data structure.
+Students often misuse linear search where binary search could be applied, or incorrectly implement binary search logic.
+Searching is fundamental for efficient data retrieval and optimization.
+Low performance suggests difficulty in understanding sorted vs unsorted data handling.
+Best learning approach: practice linear search first, then focus on binary search with careful attention to mid-point calculation and boundaries.
+
+Topic: Basics
+Programming basics include variables, loops, conditionals, and input-output handling.
+Weak fundamentals often lead to poor performance across all advanced topics.
+Students struggling here typically face issues with logical flow and syntax understanding.
+Basics are critical for all programming and algorithmic problem-solving.
+Best learning approach: focus on writing small programs, understanding control flow, and debugging simple logic errors.
