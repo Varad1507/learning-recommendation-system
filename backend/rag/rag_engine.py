@@ -1,23 +1,23 @@
-from sentence_transformers import SentenceTransformer
-import faiss
-import numpy as np
-
-model = SentenceTransformer("all-MiniLM-L6-v2")
-
-with open("backend/rag/topic_knowledge.txt", "r", encoding="utf-8") as f:
-    documents = f.read().split("\n\n")
-
-doc_embeddings = model.encode(documents)
-dimension = doc_embeddings.shape[1]
-
-index = faiss.IndexFlatL2(dimension)
-index.add(np.array(doc_embeddings))
-
 def generate_explanation(topic, learner_type):
-    query = f"Explain {topic} for a {learner_type} learner"
-    query_embedding = model.encode([query])
+    """
+    Lightweight fallback explanation.
+    This avoids heavy ML dependencies during deployment.
+    """
 
-    _, idx = index.search(np.array(query_embedding), k=1)
-    explanation = documents[idx[0][0]]
+    if learner_type == "Weak":
+        return (
+            f"You showed lower performance in {topic}. "
+            f"This resource focuses on building strong fundamentals step by step."
+        )
 
-    return explanation.strip()
+    elif learner_type == "Average":
+        return (
+            f"You have a moderate understanding of {topic}. "
+            f"This resource helps reinforce concepts and improve consistency."
+        )
+
+    else:
+        return (
+            f"You are doing well in {topic}, but this resource helps strengthen mastery "
+            f"and prepares you for advanced problems."
+        )

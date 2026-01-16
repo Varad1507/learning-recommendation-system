@@ -1,7 +1,6 @@
 from backend.models import StudentTopic, Resource
 from backend.rag.rag_engine import generate_explanation
 
-
 def get_difficulty(learner_type):
     if learner_type == "Weak":
         return ["Easy"]
