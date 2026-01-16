@@ -5,6 +5,8 @@ from backend.database import db
 from backend import models
 from backend.recommender_core import recommend_for_student
 from backend.seed_data import seed_database
+from flask import Response
+import json
 
 def create_app():
     app = Flask(__name__)
@@ -34,10 +36,13 @@ def create_app():
                 "recommendations": []
             })
 
-        return jsonify({
-            "student_id": student_id,
-            "recommendations": recs
-        })
+        return Response(
+        json.dumps({
+        "student_id": student_id,
+        "recommendations": recs
+    }),
+    mimetype="application/json"
+)
 
     return app
 
