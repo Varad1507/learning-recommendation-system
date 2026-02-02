@@ -1,6 +1,5 @@
 from backend.models import StudentTopic
-from backend.ai_recommender import generate_learning_recommendations
-
+from backend.ai_recommender import ai_recommend_resources
 
 def recommend_for_student(student_id):
     topic_rows = StudentTopic.query.filter_by(student_id=student_id).all()
@@ -9,26 +8,17 @@ def recommend_for_student(student_id):
         return []
 
     learner_type = topic_rows[0].learner_type
+    scores = [t.score for t in topic_rows]
 
-    scores = sorted([t.score for t in topic_rows])
-    threshold = scores[int(0.4 * len(scores))]
-
+    threshold = sorted(scores)[int(0.4 * len(scores))]
     weak_topics = [t.topic for t in topic_rows if t.score <= threshold]
 
-    if not weak_topics:
-        return []
+    ai_text = ai_recommend_resources(weak_topics, learner_type)
 
-    explanation = generate_learning_recommendations(
-        topics=weak_topics,
-        learner_type=learner_type
-    )
-
-    return [
-        {
-            "Topic": ", ".join(weak_topics),
-            "Title": "AI-Generated Personalized Learning Plan",
-            "ResourceType": "GenAI (Gemini)",
-            "Link": "",
-            "Explanation": explanation
-        }
-    ]
+    return [{
+        "Topic": ", ".join(weak_topics),
+        "Title": "AI-Generated Learning Plan",
+        "ResourceType": "AI Recommendation",
+        "Link": "#",
+        "Explanation": ai_text
+    }]

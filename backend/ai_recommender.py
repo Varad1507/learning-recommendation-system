@@ -1,27 +1,45 @@
-from google import genai
 import os
+import json
+from groq import Groq
 
-client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
-def generate_learning_recommendations(topics, learner_type):
+def ai_recommend_resources(weak_topics, learner_type):
+    print("🚀 GROQ AI CALLED — generating recommendations")
+
     prompt = f"""
-You are an expert learning tutor.
+You are an intelligent learning recommendation system.
 
-Student level: {learner_type}
-Weak topics: {", ".join(topics)}
+Learner type: {learner_type}
+Weak topics: {', '.join(weak_topics)}
 
-Give:
-1. Clear explanation
-2. Learning strategy
-3. Resource suggestions (videos, articles, practice)
-4. Study order
+Generate 3 learning recommendations in STRICT JSON format.
+Each object must contain:
+- Topic
+- Title
+- ResourceType
+- Link
+- Explanation
 
-Keep it concise and practical.
+Return ONLY valid JSON. Do NOT use markdown.
 """
 
-    response = client.models.generate_content(
-        model="gemini-1.5-flash",
-        contents=prompt
+    response = client.chat.completions.create(
+        model="llama-3.1-8b-instant",
+        messages=[{"role": "user", "content": prompt}],
+        temperature=0.5,
     )
 
-    return response.text
+    raw_text = response.choices[0].message.content.strip()
+
+    if raw_text.startswith("```"):
+        raw_text = raw_text.replace("```json", "").replace("```", "").strip()
+
+    try:
+        data = json.loads(raw_text)
+        print("✅ GROQ RESPONSE PARSED SUCCESSFULLY")
+        return data
+    except json.JSONDecodeError:
+        print("❌ JSON parsing failed")
+        print(raw_text)
+        return []
