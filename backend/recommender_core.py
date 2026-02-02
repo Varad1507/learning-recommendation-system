@@ -1,12 +1,5 @@
-from backend.models import StudentTopic, Resource
-from backend.rag.rag_engine import generate_explanation
-
-def get_difficulty(learner_type):
-    if learner_type == "Weak":
-        return ["Easy"]
-    elif learner_type == "Average":
-        return ["Easy", "Medium"]
-    return ["Medium"]
+from backend.models import StudentTopic
+from backend.ai_recommender import generate_learning_recommendations
 
 
 def recommend_for_student(student_id):
@@ -16,26 +9,26 @@ def recommend_for_student(student_id):
         return []
 
     learner_type = topic_rows[0].learner_type
-    difficulties = get_difficulty(learner_type)
 
-    scores = [t.score for t in topic_rows]
-    threshold = sorted(scores)[int(0.4 * len(scores))]
+    scores = sorted([t.score for t in topic_rows])
+    threshold = scores[int(0.4 * len(scores))]
+
     weak_topics = [t.topic for t in topic_rows if t.score <= threshold]
 
-    resources = (
-        Resource.query
-        .filter(Resource.topic.in_(weak_topics))
-        .filter(Resource.difficulty.in_(difficulties))
-        .all()
+    if not weak_topics:
+        return []
+
+    explanation = generate_learning_recommendations(
+        topics=weak_topics,
+        learner_type=learner_type
     )
 
     return [
         {
-            "Topic": r.topic,
-            "Title": r.title,
-            "ResourceType": r.resource_type,
-            "Link": r.link,
-            "Explanation": generate_explanation(r.topic, learner_type)
+            "Topic": ", ".join(weak_topics),
+            "Title": "AI-Generated Personalized Learning Plan",
+            "ResourceType": "GenAI (Gemini)",
+            "Link": "",
+            "Explanation": explanation
         }
-        for r in resources
     ]

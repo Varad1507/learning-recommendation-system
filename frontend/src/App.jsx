@@ -1,6 +1,9 @@
 import { useState } from "react";
 import "./index.css";
 
+const API_BASE =
+  "https://learning-recommendation-system-1.onrender.com";
+
 function App() {
   const [studentId, setStudentId] = useState("");
   const [recommendations, setRecommendations] = useState([]);
@@ -18,9 +21,9 @@ function App() {
     setRecommendations([]);
 
     try {
-        const res = await fetch(
-  `     https://learning-recommendation-system-2.onrender.com/recommend/${studentId}`
-);
+      const res = await fetch(
+        `${API_BASE}/recommend/${studentId}`
+      );
 
       if (!res.ok) {
         throw new Error("API error");
@@ -29,12 +32,16 @@ function App() {
       const data = await res.json();
 
       if (!data.recommendations || data.recommendations.length === 0) {
-        setMessage("Student is performing well. No weak topics detected.");
+        setMessage(
+          "Student is performing well. No weak topics detected."
+        );
       } else {
         setRecommendations(data.recommendations);
       }
     } catch (error) {
-      setMessage("Backend not reachable. Please try again later.");
+      setMessage(
+        "Backend not reachable. Please try again later."
+      );
     }
 
     setLoading(false);
@@ -42,11 +49,12 @@ function App() {
 
   return (
     <div className="page">
+      {/* Main Input Card */}
       <div className="main-card">
-        <h1>Learning Recommendation System</h1>
+        <h1>📘 Learning Recommendation System</h1>
 
         <p className="subtitle">
-          Personalized learning paths with explainable recommendations
+          Personalized learning paths with explainable AI (RAG)
         </p>
 
         <div className="input-section">
@@ -56,18 +64,25 @@ function App() {
             value={studentId}
             onChange={(e) => setStudentId(e.target.value)}
           />
+
           <button onClick={fetchRecommendations}>
             Get Recommendations
           </button>
         </div>
 
-        {loading && <p className="status">Analyzing performance…</p>}
+        {loading && (
+          <p className="status">
+            🔍 Analyzing student performance…
+          </p>
+        )}
+
         {message && <p className="status">{message}</p>}
       </div>
 
+      {/* Results Section */}
       {recommendations.length > 0 && (
         <div className="results">
-          <h2>Recommended Resources</h2>
+          <h2>📚 Recommended Resources</h2>
 
           <div className="results-grid">
             {recommendations.map((rec, idx) => (
@@ -75,22 +90,32 @@ function App() {
                 <span className="topic">{rec.Topic}</span>
 
                 <h3>{rec.Title}</h3>
-                <p className="type">{rec.ResourceType}</p>
 
+                <p className="type">
+                  {rec.ResourceType}
+                </p>
+
+                {/* RAG Explanation */}
                 <details className="explain-box">
-                  <summary>Why was this recommended?</summary>
+                  <summary>
+                    Why was this recommended?
+                  </summary>
                   <p className="explanation">
-                    {rec.Explanation || "Explanation not available."}
+                    {rec.Explanation ||
+                      "Explanation not available."}
                   </p>
                 </details>
 
-                <a
-                  href={rec.Link}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Open Resource →
-                </a>
+                {/* Resource Link */}
+                {rec.Link && (
+                  <a
+                    href={rec.Link}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Open Resource →
+                  </a>
+                )}
               </div>
             ))}
           </div>

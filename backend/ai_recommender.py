@@ -1,28 +1,27 @@
+from google import genai
 import os
-import google.generativeai as genai
 
-genai.configure(api_key=os.getenv("AIzaSyDhIEoBf3jyhkpnteSvNZT2mdfkLCb9_9A"))
-
-model = genai.GenerativeModel("gemini-1.5-flash")
+client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
 def generate_learning_recommendations(topics, learner_type):
-    topic_list = ", ".join(topics)
-
     prompt = f"""
-You are an intelligent learning assistant.
+You are an expert learning tutor.
 
-Student profile:
-- Learner type: {learner_type}
-- Weak topics: {topic_list}
+Student level: {learner_type}
+Weak topics: {", ".join(topics)}
 
-For EACH topic, generate:
-1. Learning objective
-2. Recommended resource types (videos, articles, practice)
-3. A short study plan
-4. Expected outcome
+Give:
+1. Clear explanation
+2. Learning strategy
+3. Resource suggestions (videos, articles, practice)
+4. Study order
 
-Respond in clear, structured text (no markdown).
+Keep it concise and practical.
 """
 
-    response = model.generate_content(prompt)
+    response = client.models.generate_content(
+        model="gemini-1.5-flash",
+        contents=prompt
+    )
+
     return response.text
