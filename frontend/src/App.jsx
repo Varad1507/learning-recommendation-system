@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./index.css";
 
+// 🔗 Backend deployed on Render
 const API_BASE =
   "https://learning-recommendation-system-1.onrender.com";
 
@@ -49,12 +50,12 @@ function App() {
 
   return (
     <div className="page">
-      {/* Main Input Card */}
+      {/* ================= MAIN CARD ================= */}
       <div className="main-card">
         <h1>📘 Learning Recommendation System</h1>
 
         <p className="subtitle">
-          Personalized learning paths with explainable AI (RAG)
+          Personalized learning paths with explainable AI
         </p>
 
         <div className="input-section">
@@ -79,7 +80,7 @@ function App() {
         {message && <p className="status">{message}</p>}
       </div>
 
-      {/* Results Section */}
+      {/* ================= RESULTS ================= */}
       {recommendations.length > 0 && (
         <div className="results">
           <h2>📚 Recommended Resources</h2>
@@ -95,7 +96,7 @@ function App() {
                   {rec.ResourceType}
                 </p>
 
-                {/* RAG Explanation */}
+                {/* 🔍 Explainable AI */}
                 <details className="explain-box">
                   <summary>
                     Why was this recommended?
@@ -106,8 +107,8 @@ function App() {
                   </p>
                 </details>
 
-                {/* Resource Link */}
-                {rec.Link && (
+                {/* 🔗 SAFE LINK HANDLING */}
+                {rec.Link && rec.Link !== "#" ? (
                   <a
                     href={rec.Link}
                     target="_blank"
@@ -115,6 +116,10 @@ function App() {
                   >
                     Open Resource →
                   </a>
+                ) : (
+                  <span className="ai-badge">
+                    🤖 AI-Generated Learning Plan
+                  </span>
                 )}
               </div>
             ))}
