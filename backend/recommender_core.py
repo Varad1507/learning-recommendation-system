@@ -7,7 +7,6 @@ def recommend_for_student(student_id):
     if not topic_rows:
         return []
 
-    # Compute weak topics using 40th percentile threshold
     scores = [t.score for t in topic_rows]
     scores.sort()
     threshold = scores[int(0.4 * len(scores))]
@@ -19,7 +18,6 @@ def recommend_for_student(student_id):
 
     learner_type = topic_rows[0].learner_type
 
-    # 🚀 AI CALL
     ai_text = ai_recommend_resources(weak_topics, learner_type)
 
     return [{
