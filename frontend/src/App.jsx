@@ -1,7 +1,6 @@
 import { useState } from "react";
 import "./index.css";
 
-// 🔗 Backend deployed on Render
 const API_BASE =
   "https://learning-recommendation-system-1.onrender.com";
 
@@ -22,38 +21,32 @@ function App() {
     setRecommendations([]);
 
     try {
-      const res = await fetch(
-        `${API_BASE}/recommend/${studentId}`
-      );
-
-      if (!res.ok) {
-        throw new Error("API error");
-      }
+      const res = await fetch(`${API_BASE}/recommend/${studentId}`);
+      if (!res.ok) throw new Error("API error");
 
       const data = await res.json();
 
       if (!data.recommendations || data.recommendations.length === 0) {
-        setMessage(
-          "Student is performing well. No weak topics detected."
-        );
+        setMessage("Student is performing well. No weak topics detected.");
       } else {
         setRecommendations(data.recommendations);
       }
-    } catch (error) {
-      setMessage(
-        "Backend not reachable. Please try again later."
-      );
+    } catch {
+      setMessage("Backend not reachable. Please try again later.");
     }
 
     setLoading(false);
   };
 
+  const openExternalLink = (url) => {
+    if (!url || !url.startsWith("http")) return;
+    window.open(url, "_blank", "noopener,noreferrer");
+  };
+
   return (
     <div className="page">
-      {/* ================= MAIN CARD ================= */}
       <div className="main-card">
         <h1>📘 Learning Recommendation System</h1>
-
         <p className="subtitle">
           Personalized learning paths with explainable AI
         </p>
@@ -65,22 +58,15 @@ function App() {
             value={studentId}
             onChange={(e) => setStudentId(e.target.value)}
           />
-
           <button onClick={fetchRecommendations}>
             Get Recommendations
           </button>
         </div>
 
-        {loading && (
-          <p className="status">
-            🔍 Analyzing student performance…
-          </p>
-        )}
-
+        {loading && <p className="status">🔍 Analyzing performance…</p>}
         {message && <p className="status">{message}</p>}
       </div>
 
-      {/* ================= RESULTS ================= */}
       {recommendations.length > 0 && (
         <div className="results">
           <h2>📚 Recommended Resources</h2>
@@ -91,31 +77,23 @@ function App() {
                 <span className="topic">{rec.Topic}</span>
 
                 <h3>{rec.Title}</h3>
+                <p className="type">{rec.ResourceType}</p>
 
-                <p className="type">
-                  {rec.ResourceType}
-                </p>
-
-                {/* 🔍 Explainable AI */}
                 <details className="explain-box">
-                  <summary>
-                    Why was this recommended?
-                  </summary>
+                  <summary>Why was this recommended?</summary>
                   <p className="explanation">
-                    {rec.Explanation ||
-                      "Explanation not available."}
+                    {rec.Explanation || "Explanation not available."}
                   </p>
                 </details>
 
-                {/* 🔗 SAFE LINK HANDLING */}
-                {rec.Link && rec.Link !== "#" ? (
-                  <a
-                    href={rec.Link}
-                    target="_blank"
-                    rel="noreferrer"
+                {/* ✅ SAFE EXTERNAL NAVIGATION */}
+                {rec.Link && rec.Link.startsWith("http") ? (
+                  <button
+                    className="link-button"
+                    onClick={() => openExternalLink(rec.Link)}
                   >
                     Open Resource →
-                  </a>
+                  </button>
                 ) : (
                   <span className="ai-badge">
                     🤖 AI-Generated Learning Plan
