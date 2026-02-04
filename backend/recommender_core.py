@@ -1,7 +1,6 @@
 from backend.models import StudentTopic
 from backend.ai_recommender import ai_recommend_resources
 
-
 def recommend_for_student(student_id):
     topic_rows = StudentTopic.query.filter_by(student_id=student_id).all()
     if not topic_rows:
