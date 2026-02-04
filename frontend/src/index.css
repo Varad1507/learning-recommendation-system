@@ -2,82 +2,82 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Inter", system-ui, sans-serif;
+  font-family: "Segoe UI", system-ui, sans-serif;
 }
 
 body {
-  background: #f4f6fb;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  min-height: 100vh;
   color: #1f2937;
 }
 
 .page {
-  max-width: 1100px;
-  margin: auto;
   padding: 40px 20px;
 }
 
-.header {
+.main-card {
+  max-width: 700px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 18px;
+  padding: 40px;
   text-align: center;
-  margin-bottom: 40px;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
 }
 
-.header h1 {
+.main-card h1 {
   font-size: 2.4rem;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
-.header p {
+.subtitle {
   color: #6b7280;
-}
-
-.card {
-  background: #ffffff;
-  border-radius: 14px;
-  padding: 24px;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
-}
-
-.input-card {
-  display: flex;
-  gap: 12px;
-  justify-content: center;
   margin-bottom: 30px;
 }
 
-.input-card input {
+.input-section {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.input-section input {
   width: 260px;
-  padding: 12px;
-  border-radius: 8px;
+  padding: 14px;
+  font-size: 1rem;
+  border-radius: 10px;
   border: 1px solid #d1d5db;
 }
 
-.input-card button {
-  padding: 12px 20px;
-  border-radius: 8px;
+.input-section button {
+  padding: 14px 22px;
+  font-size: 1rem;
+  border-radius: 10px;
   border: none;
-  background: #2563eb;
+  background: #4f46e5;
   color: white;
   cursor: pointer;
   font-weight: 600;
 }
 
-.input-card button:hover {
-  background: #1d4ed8;
+.input-section button:hover {
+  background: #4338ca;
 }
 
 .status {
-  text-align: center;
-  margin-bottom: 20px;
-  color: #374151;
+  margin-top: 20px;
+  font-weight: 500;
 }
 
-.loading {
-  color: #2563eb;
+.results {
+  max-width: 1100px;
+  margin: 60px auto 0;
 }
 
 .results h2 {
-  margin-bottom: 20px;
-  font-size: 1.6rem;
+  text-align: center;
+  color: white;
+  margin-bottom: 30px;
 }
 
 .results-grid {
@@ -86,71 +86,71 @@ body {
   gap: 24px;
 }
 
-.resource-card h3 {
-  margin: 12px 0;
+.result-card {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
 }
 
-.card-header {
-  display: flex;
-  justify-content: space-between;
-}
-
-.topic-tag {
-  background: #e0e7ff;
+.topic {
+  display: inline-block;
+  background: #eef2ff;
   color: #3730a3;
-  padding: 4px 10px;
+  padding: 6px 12px;
   border-radius: 999px;
-  font-size: 0.8rem;
+  font-size: 0.85rem;
+  margin-bottom: 10px;
 }
 
-.type-tag {
-  background: #ecfeff;
-  color: #0369a1;
-  padding: 4px 10px;
-  border-radius: 999px;
-  font-size: 0.8rem;
+.result-card h3 {
+  margin: 10px 0;
 }
 
-.explanation-box {
+.type {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.explanation {
+  margin-top: 14px;
   background: #f9fafb;
   border-radius: 10px;
-  padding: 16px;
-  margin-top: 12px;
+  padding: 14px;
 }
 
-.explanation-box h4 {
+.explanation h4 {
   margin-bottom: 8px;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
 }
 
-.explanation-box ul {
+.explanation ul {
   padding-left: 18px;
 }
 
-.explanation-box li {
+.explanation li {
   font-size: 0.9rem;
   margin-bottom: 6px;
 }
 
-.resource-link {
+.result-card a {
   display: inline-block;
-  margin-top: 14px;
+  margin-top: 16px;
   font-weight: 600;
-  color: #2563eb;
+  color: #4f46e5;
   text-decoration: none;
 }
 
-.resource-link:hover {
+.result-card a:hover {
   text-decoration: underline;
 }
 
-/* AI Badge */
 .ai-badge {
   display: inline-block;
-  margin-top: 14px;
+  margin-top: 16px;
   background: #fef3c7;
   color: #92400e;
-  padding: 6px 12px;
+  padding: 6px 14px;
   border-radius: 999px;
   font-size: 0.85rem;
 }

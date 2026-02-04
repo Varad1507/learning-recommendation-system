@@ -40,74 +40,74 @@ function App() {
 
   return (
     <div className="page">
-      {/* Header */}
-      <header className="header">
-        <h1>Learning Recommendation System</h1>
-        <p>AI-powered personalized learning with explainability</p>
-      </header>
+      {/* MAIN CENTER CARD */}
+      <div className="main-card">
+        <h1>🎓 Learning Recommendation System</h1>
+        <p className="subtitle">
+          Personalized learning paths powered by AI
+        </p>
 
-      {/* Input Card */}
-      <div className="card input-card">
-        <input
-          type="number"
-          placeholder="Enter Student ID (e.g. 1001)"
-          value={studentId}
-          onChange={(e) => setStudentId(e.target.value)}
-        />
-        <button onClick={fetchRecommendations}>
-          Get Recommendations
-        </button>
+        <div className="input-section">
+          <input
+            type="number"
+            placeholder="Enter Student ID (e.g. 1001)"
+            value={studentId}
+            onChange={(e) => setStudentId(e.target.value)}
+          />
+          <button onClick={fetchRecommendations}>
+            Get Recommendations
+          </button>
+        </div>
+
+        {loading && (
+          <p className="status">🔍 Analyzing performance…</p>
+        )}
+        {message && <p className="status">{message}</p>}
       </div>
 
-      {loading && <p className="status loading">Analyzing student performance…</p>}
-      {message && <p className="status">{message}</p>}
-
-      {/* Results */}
+      {/* RESULTS */}
       {recommendations.length > 0 && (
-        <section className="results">
-          <h2>Recommended Learning Resources</h2>
+        <div className="results">
+          <h2>📚 Recommended Learning Resources</h2>
 
           <div className="results-grid">
             {recommendations.map((rec, idx) => (
-              <div key={idx} className="card resource-card">
-                <div className="card-header">
-                  <span className="topic-tag">{rec.Topic}</span>
-                  <span className="type-tag">{rec.ResourceType}</span>
-                </div>
+              <div key={idx} className="result-card">
+                <span className="topic">{rec.Topic}</span>
 
                 <h3>{rec.Title}</h3>
+                <p className="type">{rec.ResourceType}</p>
 
-                {/* Structured Explanation */}
-                <div className="explanation-box">
-                  <h4>Why this was recommended</h4>
+                {/* STRUCTURED EXPLANATION */}
+                <div className="explanation">
+                  <h4>Why this is recommended</h4>
                   <ul>
                     {Array.isArray(rec.Explanation)
-                      ? rec.Explanation.map((point, i) => (
-                          <li key={i}>{point}</li>
+                      ? rec.Explanation.map((e, i) => (
+                          <li key={i}>{e}</li>
                         ))
                       : <li>{rec.Explanation}</li>}
                   </ul>
                 </div>
 
-                {/* Resource Action */}
+                {/* LINK */}
                 {rec.Link && rec.Link.startsWith("http") ? (
                   <a
                     href={rec.Link}
                     target="_blank"
                     rel="noreferrer"
-                    className="resource-link"
                   >
                     Open Resource →
                   </a>
                 ) : (
                   <span className="ai-badge">
-                    AI-Generated Learning Plan
+                    🤖 AI-Generated Learning Plan
                   </span>
                 )}
               </div>
             ))}
           </div>
-        </section>
+        </div>
       )}
     </div>
   );
