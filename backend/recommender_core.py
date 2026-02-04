@@ -7,8 +7,7 @@ def recommend_for_student(student_id):
     if not topic_rows:
         return []
 
-    scores = [t.score for t in topic_rows]
-    scores.sort()
+    scores = sorted([t.score for t in topic_rows])
     threshold = scores[int(0.4 * len(scores))]
 
     weak_topics = [t.topic for t in topic_rows if t.score <= threshold]
@@ -18,12 +17,20 @@ def recommend_for_student(student_id):
 
     learner_type = topic_rows[0].learner_type
 
-    ai_text = ai_recommend_resources(weak_topics, learner_type)
+    ai_response = ai_recommend_resources(weak_topics, learner_type)
 
-    return [{
-        "Topic": ", ".join(weak_topics),
-        "Title": "AI-Generated Learning Plan",
-        "ResourceType": "AI Recommendation",
-        "Link": "#",
-        "Explanation": ai_text
-    }]
+    if not ai_response:
+        return []
+
+    recommendations = []
+
+    for res in ai_response["resources"]:
+        recommendations.append({
+            "Topic": res["topic"],
+            "Title": res["title"],
+            "ResourceType": res["type"],
+            "Link": res["link"],
+            "Explanation": res["why"]
+        })
+
+    return recommendations

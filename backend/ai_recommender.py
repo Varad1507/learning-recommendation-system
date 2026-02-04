@@ -1,28 +1,54 @@
 import os
+import json
 from groq import Groq
 
 client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
 def ai_recommend_resources(weak_topics, learner_type):
-    print("🚀 AI CALLED — generating AI recommendations")
+    print("🚀 GROQ AI CALLED — generating structured recommendations")
 
     prompt = f"""
-    You are an expert learning advisor.
+You are an intelligent learning recommendation system.
 
-    Student type: {learner_type}
-    Weak topics: {", ".join(weak_topics)}
+Student type: {learner_type}
+Weak topics: {", ".join(weak_topics)}
 
-    Generate a personalized learning plan:
-    - Explain why these topics are weak
-    - What the student should focus on
-    - Suggested practice strategy
-    - Keep it concise (4–6 sentences)
-    """
+Return ONLY valid JSON in the following format:
+
+{{
+  "summary": {{
+    "student_level": "{learner_type}",
+    "weak_topics": {weak_topics},
+    "reason": "Explain briefly why these topics are weak"
+  }},
+  "resources": [
+    {{
+      "topic": "Topic name",
+      "title": "Resource title",
+      "type": "Video / Article / Practice",
+      "link": "Valid learning URL",
+      "why": "Why this resource is helpful"
+    }}
+  ]
+}}
+
+Rules:
+- Give 2–4 resources
+- Use real, well-known learning platforms (GeeksForGeeks, YouTube, LeetCode)
+- Do NOT include markdown
+- Do NOT include explanations outside JSON
+"""
 
     response = client.chat.completions.create(
         model="llama-3.1-8b-instant",
         messages=[{"role": "user", "content": prompt}],
-        temperature=0.4
+        temperature=0.3,
     )
 
-    return response.choices[0].message.content.strip()
+    raw_text = response.choices[0].message.content.strip()
+
+    try:
+        return json.loads(raw_text)
+    except Exception:
+        print("❌ AI returned invalid JSON")
+        return None
