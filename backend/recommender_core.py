@@ -14,7 +14,6 @@ def recommend_for_student(student_id):
         return []
 
     learner_type = topic_rows[0].learner_type
-
     ai_output = ai_recommend_resources(weak_topics, learner_type)
 
     if not isinstance(ai_output, list):
