@@ -27,12 +27,16 @@ function App() {
       const data = await res.json();
 
       if (!data.recommendations || data.recommendations.length === 0) {
-        setMessage("Student is performing well. No weak topics detected.");
+        setMessage(
+          "Student is performing well. No weak topics detected."
+        );
       } else {
         setRecommendations(data.recommendations);
       }
     } catch {
-      setMessage("Backend not reachable. Please try again later.");
+      setMessage(
+        "Backend not reachable. Please try again later."
+      );
     }
 
     setLoading(false);
@@ -45,8 +49,10 @@ function App() {
 
   return (
     <div className="page">
+      {/* ================= INPUT CARD ================= */}
       <div className="main-card">
         <h1>📘 Learning Recommendation System</h1>
+
         <p className="subtitle">
           Personalized learning paths with explainable AI
         </p>
@@ -58,15 +64,22 @@ function App() {
             value={studentId}
             onChange={(e) => setStudentId(e.target.value)}
           />
+
           <button onClick={fetchRecommendations}>
             Get Recommendations
           </button>
         </div>
 
-        {loading && <p className="status">🔍 Analyzing performance…</p>}
+        {loading && (
+          <p className="status">
+            🔍 Analyzing student performance…
+          </p>
+        )}
+
         {message && <p className="status">{message}</p>}
       </div>
 
+      {/* ================= RESULTS ================= */}
       {recommendations.length > 0 && (
         <div className="results">
           <h2>📚 Recommended Resources</h2>
@@ -77,20 +90,34 @@ function App() {
                 <span className="topic">{rec.Topic}</span>
 
                 <h3>{rec.Title}</h3>
+
                 <p className="type">{rec.ResourceType}</p>
 
+                {/* ===== STRUCTURED AI EXPLANATION ===== */}
                 <details className="explain-box">
                   <summary>Why was this recommended?</summary>
-                  <p className="explanation">
-                    {rec.Explanation || "Explanation not available."}
-                  </p>
+
+                  {Array.isArray(rec.Explanation) ? (
+                    <ul className="explanation-list">
+                      {rec.Explanation.map((point, i) => (
+                        <li key={i}>{point}</li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="explanation">
+                      {rec.Explanation ||
+                        "Explanation not available."}
+                    </p>
+                  )}
                 </details>
 
-                {/* ✅ SAFE EXTERNAL NAVIGATION */}
+                {/* ===== RESOURCE LINK / AI BADGE ===== */}
                 {rec.Link && rec.Link.startsWith("http") ? (
                   <button
                     className="link-button"
-                    onClick={() => openExternalLink(rec.Link)}
+                    onClick={() =>
+                      openExternalLink(rec.Link)
+                    }
                   >
                     Open Resource →
                   </button>

@@ -1,56 +1,47 @@
 import os
 from groq import Groq
-import json
 
 client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
-def ai_recommend_resources(weak_topics, learner_type):
-    print("🚀 GROQ AI CALLED — generating structured recommendations")
+def ai_recommend_resources(topics, learner_type):
+    print("🚀 AI CALLED — generating structured resources")
 
     prompt = f"""
-You are an intelligent learning recommender system.
+You are an intelligent learning recommendation system.
 
-Student level: {learner_type}
-Weak topics: {", ".join(weak_topics)}
+Student type: {learner_type}
+Weak topics: {", ".join(topics)}
 
-Return STRICT JSON in the following format ONLY.
-No markdown. No explanation outside JSON.
+Return a JSON ARRAY.
+Each item must contain:
+- Topic
+- Title
+- ResourceType (Video / Article / Practice)
+- Link (REAL, VALID URL)
+- Explanation (array of bullet points)
 
-{{
-  "learning_plan": {{
-    "summary": "short summary",
-    "steps": [
-      "step 1",
-      "step 2"
+Example format:
+[
+  {{
+    "Topic": "Sorting",
+    "Title": "Sorting Algorithms Explained",
+    "ResourceType": "Video",
+    "Link": "https://www.youtube.com/watch?v=kgBjXUE_Nwc",
+    "Explanation": [
+      "Explains time complexity visually",
+      "Helps understand trade-offs"
     ]
-  }},
-  "resources": [
-    {{
-      "topic": "Topic name",
-      "title": "Resource title",
-      "type": "Video / Article / Practice",
-      "link": "https://valid-url.com",
-      "reason": "Why this resource helps"
-    }}
-  ]
-}}
+  }}
+]
+
+Return ONLY valid JSON. No markdown.
 """
 
     response = client.chat.completions.create(
-        model="llama-3.1-8b-instant",
+        model="llama-3.3-70b-versatile",
         messages=[{"role": "user", "content": prompt}],
-        temperature=0.4
+        temperature=0.4,
     )
 
-    raw = response.choices[0].message.content.strip()
-
-    try:
-        return json.loads(raw)
-    except json.JSONDecodeError:
-        return {
-            "learning_plan": {
-                "summary": "AI response parsing failed",
-                "steps": []
-            },
-            "resources": []
-        }
+    import json
+    return json.loads(response.choices[0].message.content)
