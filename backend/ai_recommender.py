@@ -1,47 +1,29 @@
 import os
-from groq import Groq
-
-client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
 def ai_recommend_resources(topics, learner_type):
-    print("🚀 AI CALLED — generating structured resources")
+    """
+    AI is ONLY responsible for explanation & study strategy
+    """
 
-    prompt = f"""
-You are an intelligent learning recommendation system.
+    topic_list = ", ".join(topics)
 
-Student type: {learner_type}
-Weak topics: {", ".join(topics)}
+    explanation = f"""
+**Why these topics were recommended**
 
-Return a JSON ARRAY.
-Each item must contain:
-- Topic
-- Title
-- ResourceType (Video / Article / Practice)
-- Link (REAL, VALID URL)
-- Explanation (array of bullet points)
+• Based on performance analysis, the student shows comparatively lower scores in **{topic_list}**.
+• These topics require strong conceptual clarity and repeated practice.
+• Strengthening them will significantly improve overall problem-solving ability.
 
-Example format:
-[
-  {{
-    "Topic": "Sorting",
-    "Title": "Sorting Algorithms Explained",
-    "ResourceType": "Video",
-    "Link": "https://www.youtube.com/watch?v=kgBjXUE_Nwc",
-    "Explanation": [
-      "Explains time complexity visually",
-      "Helps understand trade-offs"
-    ]
-  }}
-]
+**Recommended Learning Strategy**
 
-Return ONLY valid JSON. No markdown.
+1. Start with conceptual understanding using visual explanations.
+2. Implement basic examples manually before moving to problems.
+3. Solve beginner-level problems and gradually increase difficulty.
+4. Analyze mistakes and revise weak sub-concepts.
+5. Revisit these topics weekly to ensure long-term retention.
+
+**Outcome**
+Following this plan will improve confidence, speed, and accuracy in interviews and exams.
 """
 
-    response = client.chat.completions.create(
-        model="llama-3.3-70b-versatile",
-        messages=[{"role": "user", "content": prompt}],
-        temperature=0.4,
-    )
-
-    import json
-    return json.loads(response.choices[0].message.content)
+    return explanation.strip()

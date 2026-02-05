@@ -4,11 +4,11 @@ import "./index.css";
 const API_BASE =
   "https://learning-recommendation-system-1.onrender.com";
 
-function App() {
+export default function App() {
   const [studentId, setStudentId] = useState("");
   const [recommendations, setRecommendations] = useState([]);
-  const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
 
   const fetchRecommendations = async () => {
     if (!studentId) {
@@ -21,33 +21,44 @@ function App() {
     setRecommendations([]);
 
     try {
-      const res = await fetch(`${API_BASE}/recommend/${studentId}`);
-      if (!res.ok) throw new Error("API error");
+      const res = await fetch(
+        `${API_BASE}/recommend/${studentId}`
+      );
+
+      if (!res.ok) {
+        throw new Error("API Error");
+      }
 
       const data = await res.json();
 
-      if (!data.recommendations || data.recommendations.length === 0) {
-        setMessage("Student is performing well. No weak topics detected.");
+      // ✅ BACKEND RETURNS ARRAY, NOT { recommendations }
+      if (!Array.isArray(data) || data.length === 0) {
+        setMessage(
+          "This student is performing well. No weak topics detected."
+        );
       } else {
-        setRecommendations(data.recommendations);
+        setRecommendations(data);
       }
-    } catch {
-      setMessage("Backend not reachable. Please try again later.");
+    } catch (err) {
+      console.error(err);
+      setMessage(
+        "Unable to connect to backend. Please try again."
+      );
     }
 
     setLoading(false);
   };
 
   return (
-    <div className="page">
-      {/* MAIN CENTER CARD */}
-      <div className="main-card">
-        <h1>🎓 Learning Recommendation System</h1>
-        <p className="subtitle">
-          Personalized learning paths powered by AI
+    <div className="app-wrapper">
+      {/* HERO CARD */}
+      <div className="hero-card">
+        <h1>Learning Recommendation System</h1>
+        <p className="hero-subtitle">
+          AI-powered personalized learning paths with explainable insights
         </p>
 
-        <div className="input-section">
+        <div className="input-row">
           <input
             type="number"
             placeholder="Enter Student ID (e.g. 1001)"
@@ -55,53 +66,61 @@ function App() {
             onChange={(e) => setStudentId(e.target.value)}
           />
           <button onClick={fetchRecommendations}>
-            Get Recommendations
+            Generate Plan
           </button>
         </div>
 
         {loading && (
-          <p className="status">🔍 Analyzing performance…</p>
+          <p className="status loading">
+            Analyzing performance & generating recommendations…
+          </p>
         )}
-        {message && <p className="status">{message}</p>}
+
+        {message && (
+          <p className="status">{message}</p>
+        )}
       </div>
 
-      {/* RESULTS */}
+      {/* RESULTS SECTION */}
       {recommendations.length > 0 && (
-        <div className="results">
-          <h2>📚 Recommended Learning Resources</h2>
+        <div className="results-section">
+          <h2>Your Personalized Learning Plan</h2>
 
-          <div className="results-grid">
+          <div className="cards-grid">
             {recommendations.map((rec, idx) => (
-              <div key={idx} className="result-card">
-                <span className="topic">{rec.Topic}</span>
-
-                <h3>{rec.Title}</h3>
-                <p className="type">{rec.ResourceType}</p>
-
-                {/* STRUCTURED EXPLANATION */}
-                <div className="explanation">
-                  <h4>Why this is recommended</h4>
-                  <ul>
-                    {Array.isArray(rec.Explanation)
-                      ? rec.Explanation.map((e, i) => (
-                          <li key={i}>{e}</li>
-                        ))
-                      : <li>{rec.Explanation}</li>}
-                  </ul>
+              <div key={idx} className="resource-card">
+                <div className="topic-chip">
+                  {rec.Topic}
                 </div>
 
-                {/* LINK */}
-                {rec.Link && rec.Link.startsWith("http") ? (
+                <h3>{rec.Title}</h3>
+
+                <p className="resource-type">
+                  {rec.ResourceType}
+                </p>
+
+                {/* Explanation */}
+                <div className="explanation-box">
+                  <h4>Why this was recommended</h4>
+                  <p style={{ whiteSpace: "pre-line" }}>
+                    {rec.Explanation}
+                  </p>
+                </div>
+
+                {/* Resource Link */}
+                {rec.Link &&
+                rec.Link.startsWith("http") ? (
                   <a
                     href={rec.Link}
                     target="_blank"
                     rel="noreferrer"
+                    className="resource-link"
                   >
-                    Open Resource →
+                    Open Learning Resource →
                   </a>
                 ) : (
-                  <span className="ai-badge">
-                    🤖 AI-Generated Learning Plan
+                  <span className="ai-only">
+                    AI-Generated Learning Guidance
                   </span>
                 )}
               </div>
@@ -112,5 +131,3 @@ function App() {
     </div>
   );
 }
-
-export default App;
