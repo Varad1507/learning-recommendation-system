@@ -1,180 +1,152 @@
-/* RESET */
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: "Inter", system-ui, sans-serif;
+  font-family: Inter, system-ui, sans-serif;
 }
 
-.app-wrapper {
-  min-height: 100vh;
-  background: linear-gradient(
-    135deg,
+body {
+  background: radial-gradient(
+    circle at top,
     #0f172a,
-    #020617
+    #020617 70%
   );
   color: #e5e7eb;
-  padding: 60px 20px;
 }
 
+.page {
+  min-height: 100vh;
+  padding: 80px 20px;
+}
+
+/* HERO */
 .hero-card {
   max-width: 900px;
   margin: 0 auto;
-  background: #020617;
-  border-radius: 18px;
+  background: rgba(2, 6, 23, 0.85);
+  backdrop-filter: blur(12px);
+  border-radius: 20px;
   padding: 60px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
   text-align: center;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
 }
 
 .hero-card h1 {
-  font-size: 2.8rem; 
+  font-size: 2.6rem;
   margin-bottom: 12px;
 }
 
-.hero-subtitle {
-  font-size: 1.25rem; 
+.subtitle {
+  font-size: 1.15rem;
   color: #9ca3af;
-  margin-bottom: 40px;
+  margin-bottom: 36px;
 }
 
-.input-row {
+.input-group {
   display: flex;
-  gap: 18px;
+  gap: 16px;
   justify-content: center;
 }
 
-.input-row input {
-  width: 360px;
-  padding: 18px;
-  font-size: 1.2rem; 
-  border-radius: 12px;
+.input-group input {
+  width: 320px;
+  padding: 16px 18px;
+  font-size: 1.1rem;
+  border-radius: 10px;
   border: none;
   outline: none;
 }
 
-.input-row button {
-  padding: 18px 32px;
-  border-radius: 12px;
+.input-group button {
+  padding: 16px 26px;
+  font-size: 1.05rem;
+  border-radius: 10px;
   border: none;
   background: #6366f1;
   color: white;
-  font-size: 1.1rem; 
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s;
 }
 
-.input-row button:hover {
+.input-group button:hover {
   background: #4f46e5;
 }
 
-.status {
-  margin-top: 24px;
-  font-size: 1.1rem; /* ⬆ */
+/* LOADING */
+.loading-text {
+  margin-top: 40px;
+  text-align: center;
   color: #c7d2fe;
+  font-size: 1.1rem;
 }
 
-.loading {
-  animation: pulse 1.4s infinite;
-}
-
-@keyframes pulse {
-  0% {
-    opacity: 0.4;
-  }
-  50% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0.4;
-  }
-}
-
-.results-section {
-  max-width: 1200px;
+/* RESULT */
+.result-section {
+  max-width: 900px;
   margin: 80px auto 0;
 }
 
-.results-section h2 {
+.result-section h2 {
   text-align: center;
-  font-size: 2.2rem; /* ⬆ */
-  margin-bottom: 40px;
+  font-size: 1.9rem;
+  margin-bottom: 30px;
 }
 
-.cards-grid {
-  display: grid;
-  grid-template-columns: repeat(
-    auto-fit,
-    minmax(360px, 1fr)
-  );
-  gap: 32px;
-}
-
-.resource-card {
+/* AI CARD */
+.ai-card {
   background: #020617;
   border-radius: 18px;
-  padding: 32px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  padding: 36px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
 }
 
-.topic-chip {
-  display: inline-block;
+.topic-tags {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.topic-tags span {
   background: #1e293b;
   color: #a5b4fc;
-  padding: 8px 14px;
+  padding: 6px 14px;
   border-radius: 999px;
-  font-size: 0.95rem; /* ⬆ */
-  margin-bottom: 14px;
+  font-size: 0.85rem;
 }
 
-.resource-card h3 {
-  font-size: 1.6rem; /* ⬆ */
-  margin-bottom: 8px;
+.ai-card h3 {
+  font-size: 1.4rem;
+  margin-bottom: 4px;
 }
 
-.resource-type {
-  font-size: 1rem; /* ⬆ */
+.ai-label {
+  font-size: 0.85rem;
   color: #94a3b8;
   margin-bottom: 20px;
 }
 
-.explanation-box {
+.ai-box {
   background: #020617;
   border: 1px solid #1e293b;
   border-radius: 12px;
   padding: 18px;
-  margin-bottom: 20px;
 }
 
-.explanation-box h4 {
-  font-size: 1.1rem; /* ⬆ */
-  margin-bottom: 10px;
+.ai-box h4 {
+  font-size: 0.95rem;
   color: #c7d2fe;
+  margin-bottom: 10px;
 }
 
-.explanation-box p {
-  font-size: 1.05rem; /* ⬆ */
+.ai-box p {
+  font-size: 0.95rem;
   line-height: 1.6;
   color: #e5e7eb;
 }
 
-.resource-link {
-  display: inline-block;
-  margin-top: 10px;
-  font-size: 1.05rem; /* ⬆ */
-  color: #818cf8;
-  text-decoration: none;
-  font-weight: 600;
-}
-
-.resource-link:hover {
-  text-decoration: underline;
-}
-
-.ai-only {
-  display: inline-block;
-  margin-top: 10px;
-  font-size: 0.95rem;
-  color: #94a3b8;
+.ai-footer {
+  margin-top: 14px;
+  font-size: 0.75rem;
+  color: #64748b;
 }

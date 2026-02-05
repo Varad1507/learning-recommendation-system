@@ -1,130 +1,85 @@
 import { useState } from "react";
 import "./index.css";
 
-const API_BASE =
-  "https://learning-recommendation-system-1.onrender.com";
+const API_BASE = "http://127.0.0.1:5000";
 
 export default function App() {
   const [studentId, setStudentId] = useState("");
-  const [recommendations, setRecommendations] = useState([]);
+  const [plan, setPlan] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
 
-  const fetchRecommendations = async () => {
-    if (!studentId) {
-      setMessage("Please enter a Student ID");
-      return;
-    }
+  const generatePlan = async () => {
+    if (!studentId) return;
 
     setLoading(true);
-    setMessage("");
-    setRecommendations([]);
+    setPlan(null);
 
-    try {
-      const res = await fetch(
-        `${API_BASE}/recommend/${studentId}`
-      );
+    const res = await fetch(
+      `${API_BASE}/recommend/${studentId}`
+    );
+    const json = await res.json();
 
-      if (!res.ok) {
-        throw new Error("API Error");
-      }
-
-      const data = await res.json();
-
-      // ✅ BACKEND RETURNS ARRAY, NOT { recommendations }
-      if (!Array.isArray(data) || data.length === 0) {
-        setMessage(
-          "This student is performing well. No weak topics detected."
-        );
-      } else {
-        setRecommendations(data);
-      }
-    } catch (err) {
-      console.error(err);
-      setMessage(
-        "Unable to connect to backend. Please try again."
-      );
+    if (json.recommendations && json.recommendations.length > 0) {
+      setPlan({
+        topics: [...new Set(json.recommendations.map(r => r.Topic))],
+        explanation: json.recommendations[0].Explanation
+      });
     }
 
     setLoading(false);
   };
 
   return (
-    <div className="app-wrapper">
-      {/* HERO CARD */}
+    <div className="page">
       <div className="hero-card">
         <h1>Learning Recommendation System</h1>
-        <p className="hero-subtitle">
+        <p className="subtitle">
           AI-powered personalized learning paths with explainable insights
         </p>
 
-        <div className="input-row">
+        <div className="input-group">
           <input
             type="number"
-            placeholder="Enter Student ID (e.g. 1001)"
+            placeholder="Enter Student ID"
             value={studentId}
             onChange={(e) => setStudentId(e.target.value)}
           />
-          <button onClick={fetchRecommendations}>
+          <button onClick={generatePlan}>
             Generate Plan
           </button>
         </div>
-
-        {loading && (
-          <p className="status loading">
-            Analyzing performance & generating recommendations…
-          </p>
-        )}
-
-        {message && (
-          <p className="status">{message}</p>
-        )}
       </div>
 
-      {/* RESULTS SECTION */}
-      {recommendations.length > 0 && (
-        <div className="results-section">
+      {loading && (
+        <p className="loading-text">
+          Generating AI learning plan…
+        </p>
+      )}
+
+      {plan && (
+        <div className="result-section">
           <h2>Your Personalized Learning Plan</h2>
 
-          <div className="cards-grid">
-            {recommendations.map((rec, idx) => (
-              <div key={idx} className="resource-card">
-                <div className="topic-chip">
-                  {rec.Topic}
-                </div>
+          <div className="ai-card">
+            <div className="topic-tags">
+              {plan.topics.map((t, i) => (
+                <span key={i}>{t}</span>
+              ))}
+            </div>
 
-                <h3>{rec.Title}</h3>
+            <h3>AI-Generated Learning Plan</h3>
+            <p className="ai-label">AI Recommendation</p>
 
-                <p className="resource-type">
-                  {rec.ResourceType}
-                </p>
+            <div className="ai-box">
+              <h4>Why this was recommended</h4>
+              <p style={{ whiteSpace: "pre-line" }}>
+                {plan.explanation}
+              </p>
+            </div>
 
-                {/* Explanation */}
-                <div className="explanation-box">
-                  <h4>Why this was recommended</h4>
-                  <p style={{ whiteSpace: "pre-line" }}>
-                    {rec.Explanation}
-                  </p>
-                </div>
-
-                {/* Resource Link */}
-                {rec.Link &&
-                rec.Link.startsWith("http") ? (
-                  <a
-                    href={rec.Link}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="resource-link"
-                  >
-                    Open Learning Resource →
-                  </a>
-                ) : (
-                  <span className="ai-only">
-                    AI-Generated Learning Guidance
-                  </span>
-                )}
-              </div>
-            ))}
+            <p className="ai-footer">
+              AI-Generated Learning Guidance
+            </p>
           </div>
         </div>
       )}

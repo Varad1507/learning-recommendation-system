@@ -1,29 +1,50 @@
 import os
+from groq import Groq
+
+client = Groq(
+    api_key=os.getenv("GROQ_API_KEY")
+)
 
 def ai_recommend_resources(topics, learner_type):
     """
-    AI is ONLY responsible for explanation & study strategy
+    Uses Groq LLM to generate personalized learning explanations.
+    AI is ONLY responsible for explanation.
     """
+
+    if not topics:
+        return "No weak topics identified."
 
     topic_list = ", ".join(topics)
 
-    explanation = f"""
-**Why these topics were recommended**
+    prompt = f"""
+You are an intelligent learning assistant.
 
-• Based on performance analysis, the student shows comparatively lower scores in **{topic_list}**.
-• These topics require strong conceptual clarity and repeated practice.
-• Strengthening them will significantly improve overall problem-solving ability.
+A student with learner type "{learner_type}" is weak in the following topics:
+{topic_list}
 
-**Recommended Learning Strategy**
+Generate:
+1. Why these topics were recommended
+2. A clear, beginner-friendly learning strategy
+3. Expected learning outcome
 
-1. Start with conceptual understanding using visual explanations.
-2. Implement basic examples manually before moving to problems.
-3. Solve beginner-level problems and gradually increase difficulty.
-4. Analyze mistakes and revise weak sub-concepts.
-5. Revisit these topics weekly to ensure long-term retention.
-
-**Outcome**
-Following this plan will improve confidence, speed, and accuracy in interviews and exams.
+Keep the explanation concise, structured, and easy to understand.
+Avoid markdown symbols.
 """
 
-    return explanation.strip()
+    try:
+        response = client.chat.completions.create(
+            model="llama3-8b-8192",
+            messages=[
+                {"role": "user", "content": prompt}
+            ],
+            temperature=0.5,
+            max_tokens=300
+        )
+
+        return response.choices[0].message.content.strip()
+
+    except Exception as e:
+        return (
+            "AI explanation could not be generated at this time. "
+            "Please refer to the recommended learning resources."
+        )
