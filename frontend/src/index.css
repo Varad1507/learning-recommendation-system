@@ -16,51 +16,53 @@ body {
 
 .page {
   min-height: 100vh;
-  padding: 80px 20px;
+  padding: 100px 24px;
 }
 
-/* HERO */
 .hero-card {
-  max-width: 900px;
+  max-width: 1400px;          
   margin: 0 auto;
-  background: rgba(2, 6, 23, 0.85);
-  backdrop-filter: blur(12px);
-  border-radius: 20px;
-  padding: 60px;
+  background: rgba(2, 6, 23, 0.88);
+  backdrop-filter: blur(14px);
+  border-radius: 24px;      
+  border: 1px solid rgba(0, 0, 0, 0.55);  
+  padding: 100px 96px;        
   text-align: center;
-  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+  box-shadow:
+    0 40px 100px rgba(0, 0, 0, 0.65),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.03);
 }
 
 .hero-card h1 {
-  font-size: 2.6rem;
-  margin-bottom: 12px;
+  font-size: 3.8rem;         
+  margin-bottom: 20px;
 }
 
 .subtitle {
-  font-size: 1.15rem;
+  font-size: 1.35rem;         
   color: #9ca3af;
-  margin-bottom: 36px;
+  margin-bottom: 48px;
 }
 
 .input-group {
   display: flex;
-  gap: 16px;
+  gap: 22px;
   justify-content: center;
 }
 
 .input-group input {
-  width: 320px;
-  padding: 16px 18px;
-  font-size: 1.1rem;
-  border-radius: 10px;
+  width: 520px;             
+  padding: 26px 28px;       
+  font-size: 1.5rem;         
+  border-radius: 16px;       
   border: none;
   outline: none;
 }
 
 .input-group button {
-  padding: 16px 26px;
-  font-size: 1.05rem;
-  border-radius: 10px;
+  padding: 26px 44px;        
+  font-size: 1.45rem;        
+  border-radius: 16px;
   border: none;
   background: #6366f1;
   color: white;
@@ -68,85 +70,95 @@ body {
   cursor: pointer;
 }
 
+
 .input-group button:hover {
   background: #4f46e5;
 }
 
-/* LOADING */
 .loading-text {
-  margin-top: 40px;
+  margin-top: 48px;
   text-align: center;
   color: #c7d2fe;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
 }
 
-/* RESULT */
 .result-section {
-  max-width: 900px;
-  margin: 80px auto 0;
+  max-width: 1400px;          
+  margin: 100px auto 0;
 }
 
 .result-section h2 {
   text-align: center;
-  font-size: 1.9rem;
-  margin-bottom: 30px;
+  font-size: 2.2rem;          
+  margin-bottom: 40px;
 }
 
-/* AI CARD */
 .ai-card {
+  overflow: visible;
   background: #020617;
-  border-radius: 18px;
-  padding: 36px;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+  border-radius: 22px;
+  padding: 44px;             
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.6);
 }
 
 .topic-tags {
   display: flex;
-  gap: 10px;
-  margin-bottom: 16px;
+  gap: 12px;
+  margin-bottom: 22px;
   flex-wrap: wrap;
 }
 
 .topic-tags span {
   background: #1e293b;
   color: #a5b4fc;
-  padding: 6px 14px;
+  padding: 8px 18px;          
   border-radius: 999px;
-  font-size: 0.85rem;
+  font-size: 1rem;
 }
 
 .ai-card h3 {
-  font-size: 1.4rem;
-  margin-bottom: 4px;
+  font-size: 1.85rem;
 }
 
+.explanation {
+  max-height: min(85vh, 1100px);   
+  overflow-y: auto;
+  scrollbar-gutter: stable both-edges;
+  padding-right: 20px;             
+  font-size: 1.35rem;
+  line-height: 1.85;
+  scroll-behavior: smooth;
+  word-break: break-word;
+}
+
+
 .ai-label {
-  font-size: 0.85rem;
+  font-size: 1.05rem;
   color: #94a3b8;
-  margin-bottom: 20px;
+  margin-bottom: 26px;
 }
 
 .ai-box {
   background: #020617;
   border: 1px solid #1e293b;
-  border-radius: 12px;
-  padding: 18px;
+  border-radius: 16px;
+  padding: 26px;              
 }
 
 .ai-box h4 {
-  font-size: 0.95rem;
+  font-size: 1.1rem;        
   color: #c7d2fe;
-  margin-bottom: 10px;
+  margin-bottom: 14px;
 }
 
 .ai-box p {
-  font-size: 0.95rem;
-  line-height: 1.6;
+  font-size: 1.35rem;         
+  line-height: 1.8;
   color: #e5e7eb;
 }
 
 .ai-footer {
-  margin-top: 14px;
-  font-size: 0.75rem;
+  margin-top: 20px;
+  font-size: 0.9rem;
   color: #64748b;
 }

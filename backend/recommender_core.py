@@ -1,34 +1,39 @@
-from backend.models import StudentTopic
+import math
+from backend.models import StudentTopic, Resource
 from backend.ai_recommender import ai_recommend_resources
-from backend.resources_map import RESOURCES_MAP
 
 def recommend_for_student(student_id):
-    topic_rows = StudentTopic.query.filter_by(student_id=student_id).all()
-    if not topic_rows:
+    rows = StudentTopic.query.filter_by(student_id=student_id).all()
+
+    if not rows:
         return []
 
-    scores = sorted([t.score for t in topic_rows])
-    threshold = scores[int(0.4 * len(scores))]
+    scores = sorted([r.score for r in rows])
+    cutoff = max(1, math.ceil(0.30 * len(scores)))
+    threshold = scores[cutoff - 1]
 
-    weak_topics = [t.topic for t in topic_rows if t.score <= threshold]
+    weak_topics = [
+        r.topic for r in rows if r.score <= threshold
+    ]
+
     if not weak_topics:
         return []
 
-    learner_type = topic_rows[0].learner_type
-
-    # AI ONLY FOR EXPLANATION
-    explanation = ai_recommend_resources(weak_topics, learner_type)
-
-    recommendations = []
+    learner_type = rows[0].learner_type
+    results = []
 
     for topic in weak_topics:
-        for res in RESOURCES_MAP.get(topic, []):
-            recommendations.append({
+        explanation = ai_recommend_resources([topic], learner_type)
+
+        resources = Resource.query.filter_by(topic=topic).all()
+
+        for r in resources:
+            results.append({
                 "Topic": topic,
-                "Title": res["title"],
-                "ResourceType": res["type"],
-                "Link": res["link"],
+                "Title": r.title,
+                "ResourceType": r.resource_type,
+                "Link": r.link,
                 "Explanation": explanation
             })
 
-    return recommendations
+    return results

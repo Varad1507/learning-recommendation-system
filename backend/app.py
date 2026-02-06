@@ -2,11 +2,8 @@ from flask import Flask, jsonify
 from flask_cors import CORS
 import os
 from backend.database import db
-from backend import models
+from backend.seed import seed_database
 from backend.recommender_core import recommend_for_student
-from backend.seed_data import seed_database
-from flask import Response
-import json
 
 def create_app():
     app = Flask(__name__)
@@ -25,24 +22,12 @@ def create_app():
         db.create_all()
         seed_database()
 
-    @app.route("/recommend/<int:student_id>", methods=["GET"])
+    @app.route("/recommend/<int:student_id>")
     def recommend(student_id):
-        recs = recommend_for_student(student_id)
-
-        if not recs:
-            return jsonify({
-                "student_id": student_id,
-                "message": "No weak topics detected",
-                "recommendations": []
-            })
-
-        return Response(
-        json.dumps({
-        "student_id": student_id,
-        "recommendations": recs
-    }),
-    mimetype="application/json"
-)
+        return jsonify({
+            "student_id": student_id,
+            "recommendations": recommend_for_student(student_id)
+        })
 
     return app
 
