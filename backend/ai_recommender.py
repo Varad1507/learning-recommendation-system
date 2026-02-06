@@ -21,7 +21,7 @@ Explain:
             model="llama-3.1-8b-instant",
             messages=[{"role": "user", "content": prompt}],
             temperature=0.5,
-            max_tokens=350
+            max_tokens=1200
         )
 
         return response.choices[0].message.content.strip()
